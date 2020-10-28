@@ -1,8 +1,12 @@
 package com.id.taqi.examplersql.mapping;
 
 import com.id.taqi.examplersql.dao.EmployeeReq;
+import com.id.taqi.examplersql.dao.EmployeeRes;
 import com.id.taqi.examplersql.domain.entity.Employee;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class EmployeeMapping {
@@ -17,13 +21,18 @@ public class EmployeeMapping {
             .build();
     }
 
-    public EmployeeReq toRequest(Employee employee){
-        return EmployeeReq.builder()
+    public EmployeeRes toRequest(Employee employee){
+        return EmployeeRes.builder()
+                .id(employee.getId())
                 .firstName(employee.getFirstName())
                 .lastName(employee.getLastName())
                 .gender(employee.getGender())
                 .email(employee.getEmail())
                 .address(employee.getAddress())
                 .build();
+    }
+
+    public List<EmployeeRes> toRequest(List<Employee> list){
+        return list.stream().map(this::toRequest).collect(Collectors.toList());
     }
 }
