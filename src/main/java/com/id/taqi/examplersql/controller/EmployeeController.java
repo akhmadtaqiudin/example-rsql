@@ -36,6 +36,8 @@ public class EmployeeController {
     public ResponseEntity getAll(@PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
                                  @RequestParam(name = "filter", required = false) String filter){
         Page<EmployeeRes> page = service.findAllLike(filter, pageable);
+        if (page.isEmpty())
+            return ResponseEntity.ok(HttpStatus.NOT_FOUND);
         return ResponseEntity.ok(page);
     }
 
@@ -50,8 +52,22 @@ public class EmployeeController {
                                 @RequestParam(name = "firstName2", required = true) String firstName2){
         Page<EmployeeRes> page = service.findAllIn(firstName1, firstName2, pageable);
         if (page.isEmpty())
-            return ResponseEntity.ok(HttpStatus.BAD_GATEWAY);
+            return ResponseEntity.ok(HttpStatus.NOT_FOUND);
+        return ResponseEntity.ok(page);
+    }
 
+    @GetMapping(value = "findCriteria")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", required = false, defaultValue = "0", paramType = "query", dataType = "integer"),
+            @ApiImplicitParam(name = "size", required = false, defaultValue = "10", paramType = "query", dataType = "integer"),
+            @ApiImplicitParam(name = "sort", required = false, paramType = "query", dataType = "String")
+    })
+    public ResponseEntity getCriteria(@PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
+                                @RequestParam(name = "firstName", required = false) String firstName,
+                                @RequestParam(name = "lastName", required = false) String lastName){
+        Page<EmployeeRes> page = service.findAllCriteria(firstName, lastName, pageable);
+        if (page.isEmpty())
+            return ResponseEntity.ok(HttpStatus.NOT_FOUND);
         return ResponseEntity.ok(page);
     }
 
