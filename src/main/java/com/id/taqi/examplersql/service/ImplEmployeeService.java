@@ -42,13 +42,15 @@ public class ImplEmployeeService implements EmployeeService{
     }
 
     @Override
-    public Page<EmployeeRes> findAllIn(String firstName1, String firstName2, Pageable pgb) {
-        if (StringUtils.isBlank(firstName1) || StringUtils.isBlank(firstName2))
-            return null;
-
-        String filter = "firstName=in=("+firstName1+","+firstName2+")";
+    public Page<EmployeeRes> findAllIn(String filter, Pageable pgb) {
         log.info("param filter = {}",filter);
-        Page<Employee> page =  repository.findAll(toSpecification(filter), pgb);
+
+        String[] pisah = filter.split(",");
+        String data1 = pisah[0];
+        String data2 = pisah[1];
+        String concat = "firstName=in=("+data1+","+data2+")";
+        log.info("concat filter = {}",concat);
+        Page<Employee> page =  repository.findAll(toSpecification(concat), pgb);
         return new PageImpl<>(mapping.toRequest(page.getContent()), pgb, page.getTotalElements());
     }
 

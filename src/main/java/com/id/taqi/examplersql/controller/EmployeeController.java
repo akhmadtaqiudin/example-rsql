@@ -6,6 +6,7 @@ import com.id.taqi.examplersql.service.EmployeeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Optional;
 
@@ -33,7 +35,7 @@ public class EmployeeController {
             @ApiImplicitParam(name = "size", required = false, defaultValue = "10", paramType = "query", dataType = "integer"),
             @ApiImplicitParam(name = "sort", required = false, paramType = "query", dataType = "String")
     })
-    public ResponseEntity getAll(@PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
+    public ResponseEntity getAll(@ApiParam(hidden = true) @ApiIgnore @PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
                                  @RequestParam(name = "filter", required = false) String filter){
         Page<EmployeeRes> page = service.findAllLike(filter, pageable);
         if (page.isEmpty())
@@ -47,10 +49,9 @@ public class EmployeeController {
             @ApiImplicitParam(name = "size", required = false, defaultValue = "10", paramType = "query", dataType = "integer"),
             @ApiImplicitParam(name = "sort", required = false, paramType = "query", dataType = "String")
     })
-    public ResponseEntity getIn(@PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
-                                 @RequestParam(name = "firstName1", required = true) String firstName1,
-                                @RequestParam(name = "firstName2", required = true) String firstName2){
-        Page<EmployeeRes> page = service.findAllIn(firstName1, firstName2, pageable);
+    public ResponseEntity getIn(@ApiParam(hidden = true) @ApiIgnore @PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
+                                 @RequestParam(name = "filter", required = true) String filter){
+        Page<EmployeeRes> page = service.findAllIn(filter, pageable);
         if (page.isEmpty())
             return ResponseEntity.ok(HttpStatus.NOT_FOUND);
         return ResponseEntity.ok(page);
@@ -62,7 +63,7 @@ public class EmployeeController {
             @ApiImplicitParam(name = "size", required = false, defaultValue = "10", paramType = "query", dataType = "integer"),
             @ApiImplicitParam(name = "sort", required = false, paramType = "query", dataType = "String")
     })
-    public ResponseEntity getCriteria(@PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
+    public ResponseEntity getCriteria(@ApiParam(hidden = true) @ApiIgnore @PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
                                 @RequestParam(name = "firstName", required = false) String firstName,
                                 @RequestParam(name = "lastName", required = false) String lastName){
         Page<EmployeeRes> page = service.findAllCriteria(firstName, lastName, pageable);

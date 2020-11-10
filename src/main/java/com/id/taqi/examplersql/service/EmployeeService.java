@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface EmployeeService {
     Page<EmployeeRes> findAllLike(String filter, Pageable pgb);
-    Page<EmployeeRes> findAllIn(String firstName1, String firstName2, Pageable pgb);
+    Page<EmployeeRes> findAllIn(String filter, Pageable pgb);
     Page<EmployeeRes> findAllCriteria(String firstName, String lastName, Pageable pageable);
     Optional<EmployeeRes> save(EmployeeReq req);
     Optional<EmployeeRes> update(EmployeeReq req);
